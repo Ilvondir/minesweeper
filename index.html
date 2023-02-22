@@ -1,13 +1,26 @@
 <!DOCTYPE html>
-<html lang="pl-PL">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sapper</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
-        <script src="js/script.src" defer></script>
+        <script src="js/script.js" defer></script>
     </head>
     <body>
-        
+        <div class="container">
+            <div class="panel">
+                <div class="p1">
+                    <label for="rows">Wprowadź liczbę wierszy: </label>
+                    <input type="number" min="10" max="50" id="rows" value="10"><br>
+                    <label for="cols">Wprowadź liczbę kolumn: </label>
+                    <input type="number" min="10" max="50" id="cols" value="10">
+                </div>
+                <div class="p2">
+                    <button id="start">Rozpocznij grę</button>
+                </div>
+            </div>
+            <div class="game"></div>
+        </div>
     </body>
 </html>
