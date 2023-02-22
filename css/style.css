@@ -1,14 +1,12 @@
 body {
-    overflow: hidden;
     box-sizing: border-box;
     padding: 0;
     margin: 0;
 }
 
 .container {
-    width: 100vw;
+    width: 99vw;
     max-height: 100vh;
-    overflow: hidden;
     padding: 1vw;
     box-sizing: border-box;
 }
@@ -21,6 +19,7 @@ body {
     background: #EEEEEE;
     border: 0.2vw solid #CCC;
     border-radius: 1.5vw;
+    margin-bottom: 1vw;
 }
 
 .container > .panel > .p1 {
@@ -31,4 +30,27 @@ body {
 .container > .panel > .p2 {
     float: left;
     margin: 1.4vw;
+}
+
+.container > .game {
+    clear: both;
+}
+
+.container > .game > .row {
+    width: 100%;
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container > .game > .row > .cell {
+    width: 1.8vw;
+    height: 1.8vw;
+    background-color: #AAA;
+    margin: .2vw;
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
