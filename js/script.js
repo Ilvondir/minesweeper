@@ -7,6 +7,8 @@ function start() {
     let cols = document.querySelector("#cols").value;
     let rows = document.querySelector("#rows").value;
 
+    gamePanel.innerHTML = "";
+
     let board = new Array(rows);
 
     for (let i=0;i<rows;i++) {
