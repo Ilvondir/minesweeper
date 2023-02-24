@@ -12,14 +12,15 @@ body {
 }
 
 .container > .panel {
-    width: 98vw;
+    width: 15vw;
     padding: 1vw;
+    height: 96vh;
     float: left;
+    margin-right: 3vw;
     box-sizing: border-box;
     background: #EEEEEE;
     border: 0.2vw solid #CCC;
     border-radius: 1.5vw;
-    margin-bottom: 1vw;
 }
 
 .container > .panel > .p1 {
@@ -33,7 +34,14 @@ body {
 }
 
 .container > .game {
-    clear: both;
+    float: left;
+    max-width: 75vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    height: 97vh;
 }
 
 .container > .game > .row {
@@ -53,4 +61,5 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 0.3vw;
 }
