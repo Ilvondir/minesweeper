@@ -19,10 +19,10 @@ function start() {
             bombs = Math.floor(0.2*cols*rows);
             break;
         case "Średni":
-            bombs = Math.floor(0.4*cols*rows);
+            bombs = Math.floor(0.35*cols*rows);
             break;
         case "Trudny":
-            bombs = Math.floor(0.6*cols*rows);
+            bombs = Math.floor(0.5*cols*rows);
             break;
             
     }
@@ -39,8 +39,6 @@ function start() {
         }
     }
 
-    drawBombs();
-
     for (let i=0;i<rows;i++) {
 
         const row = document.createElement("div");
@@ -54,9 +52,7 @@ function start() {
             const cell = document.createElement("div");
             cell.setAttribute("id", id);
             cell.setAttribute("class", "cell");
-            cell.addEventListener("click", checking);
-            
-            if (board[i][j]==1) cell.setAttribute("style", "background: red");
+            cell.addEventListener("click", firstClick);
 
             row.append(cell)
 
@@ -64,7 +60,7 @@ function start() {
     }
 }
 
-function drawBombs() {
+function drawBombs(xClick, yClick) {
     for (let i=0; i<bombs; i++) {
 
         let x = Math.floor(Math.random()*rows);
@@ -72,14 +68,35 @@ function drawBombs() {
         let again = false;
 
         do {
-            x = Math.floor(Math.random()*rows);
-            y = Math.floor(Math.random()*cols);
+            do {
+                x = Math.floor(Math.random()*rows);
+                y = Math.floor(Math.random()*cols);
+            } while (xClick==x && yClick==y);
 
             if (board[x][y] != 1) {
                 board[x][y]=1;
                 again = false;
+                document.querySelector("#coord" + x + "-" + y).style.cssText = "background: red";
             } else again = true;
         } while (again)
+    }
+}
+
+function firstClick() {
+    let id = event.target.id;
+    let coords = id.split("d");
+    coords = coords[1].split("-");
+    let x = coords[0];
+    let y = coords[1];
+
+    drawBombs(x, y);
+
+    for(let i=0;i<cols;i++) {
+        for (let j=0;j<rows;j++) {
+            let cell = document.querySelector("#coord" + j + "-" + i);
+            cell.removeEventListener("click", firstClick);
+            cell.addEventListener("click", checking);
+        }
     }
 }
 
@@ -90,4 +107,7 @@ function checking() {
     let x = coords[0];
     let y = coords[1];
     console.log("(" + x +  ", " + y + ")")
+
+    if (board[x][y]==1) console.log("bomb");
+    else console.log("clear");
 }
