@@ -11,44 +11,44 @@ let bombs;
 function start() {
     cols = document.querySelector("#cols").value;
     rows = document.querySelector("#rows").value;
-    
+
     let difficult = document.querySelector("#bombs").value;
 
     switch (difficult) {
         case "Łatwy":
-            bombs = Math.floor(0.2*cols*rows);
+            bombs = Math.floor(0.2 * cols * rows);
             break;
         case "Średni":
-            bombs = Math.floor(0.35*cols*rows);
+            bombs = Math.floor(0.35 * cols * rows);
             break;
         case "Trudny":
-            bombs = Math.floor(0.5*cols*rows);
+            bombs = Math.floor(0.5 * cols * rows);
             break;
-            
+
     }
 
     gamePanel.innerHTML = "";
 
     board = new Array(rows);
 
-    for (let i=0;i<rows;i++) {
+    for (let i = 0; i < rows; i++) {
         board[i] = new Array(cols);
 
-        for (let j=0;j<cols;j++) {
+        for (let j = 0; j < cols; j++) {
             board[i][j] = 0;
         }
     }
 
-    for (let i=0;i<rows;i++) {
+    for (let i = 0; i < rows; i++) {
 
         const row = document.createElement("div");
         row.setAttribute("class", "row");
         gamePanel.append(row);
 
-        for (let j=0;j<cols;j++) {
-            
+        for (let j = 0; j < cols; j++) {
+
             let id = "coord" + i + "-" + j;
-            
+
             const cell = document.createElement("div");
             cell.setAttribute("id", id);
             cell.setAttribute("class", "cell");
@@ -61,20 +61,20 @@ function start() {
 }
 
 function drawBombs(xClick, yClick) {
-    for (let i=0; i<bombs; i++) {
+    for (let i = 0; i < bombs; i++) {
 
-        let x = Math.floor(Math.random()*rows);
-        let y = Math.floor(Math.random()*cols);
+        let x = Math.floor(Math.random() * rows);
+        let y = Math.floor(Math.random() * cols);
         let again = false;
 
         do {
             do {
-                x = Math.floor(Math.random()*rows);
-                y = Math.floor(Math.random()*cols);
-            } while (xClick==x && yClick==y);
+                x = Math.floor(Math.random() * rows);
+                y = Math.floor(Math.random() * cols);
+            } while (xClick == x && yClick == y);
 
             if (board[x][y] != 1) {
-                board[x][y]=1;
+                board[x][y] = 1;
                 again = false;
                 document.querySelector("#coord" + x + "-" + y).style.cssText = "background: red";
             } else again = true;
@@ -91,13 +91,15 @@ function firstClick() {
 
     drawBombs(x, y);
 
-    for(let i=0;i<cols;i++) {
-        for (let j=0;j<rows;j++) {
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
             let cell = document.querySelector("#coord" + j + "-" + i);
             cell.removeEventListener("click", firstClick);
             cell.addEventListener("click", checking);
         }
     }
+
+    animating(x, y);
 }
 
 function checking() {
@@ -106,8 +108,23 @@ function checking() {
     coords = coords[1].split("-");
     let x = coords[0];
     let y = coords[1];
-    console.log("(" + x +  ", " + y + ")")
+    console.log("(" + x + ", " + y + ")")
 
-    if (board[x][y]==1) console.log("bomb");
+    if (board[x][y] == 1) console.log("bomb");
     else console.log("clear");
+
+    animating(x, y);
+}
+
+function animating(x, y) {
+    anime({
+        targets: "#coord" + x + "-" + y,
+        easing: "linear",
+        rotateY: 180,
+        backgroundColor: function() {
+            if (board[x][y]==0) return "rgb(255,255,255)";
+            else return "rgb(0,255,255)";
+        },
+        duration: 400
+    })
 }
