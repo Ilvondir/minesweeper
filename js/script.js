@@ -109,7 +109,9 @@ function checking() {
     let x = coords[0];
     let y = coords[1];
 
-    if (board[x][y] == 1) animatingWith(x, y);
+    if (board[x][y] == 1) {
+        animatingWith(x, y);
+    }
     else animatingWithout(x, y);
     
 }
@@ -131,9 +133,19 @@ function animatingWith(x, y) {
             value: "rgb(255,0,0)",
             duration: 0,
         },
-        scale: [1, 30, 1],
-        opacity: [1, 0.1, 0.1, 0.1, 1],
+        scale: [1, 30],
+        opacity: [1, 0],
         easing: "linear",
-        duration: 400
+        duration: 500,
+        complete: function() {
+            anime({
+                targets: "#coord" + x + "-" + y,
+                backgroundColor: "rgb(255,0,0)",
+                scale: 1,
+                opacity: 1,
+                easing: "linear",
+                duration: 0
+            })
+        }
     })
 }
