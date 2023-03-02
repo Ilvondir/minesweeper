@@ -76,7 +76,6 @@ function drawBombs(xClick, yClick) {
             if (board[x][y] != 1) {
                 board[x][y] = 1;
                 again = false;
-                document.querySelector("#coord" + x + "-" + y).style.cssText = "background: red";
             } else again = true;
         } while (again)
     }
@@ -99,7 +98,8 @@ function firstClick() {
         }
     }
 
-    animating(x, y);
+    if (board[x][y] == 1) animatingWith(x, y);
+    else animatingWithout(x, y);
 }
 
 function checking() {
@@ -108,23 +108,32 @@ function checking() {
     coords = coords[1].split("-");
     let x = coords[0];
     let y = coords[1];
-    console.log("(" + x + ", " + y + ")")
 
-    if (board[x][y] == 1) console.log("bomb");
-    else console.log("clear");
-
-    animating(x, y);
+    if (board[x][y] == 1) animatingWith(x, y);
+    else animatingWithout(x, y);
+    
 }
 
-function animating(x, y) {
+function animatingWithout(x, y) {
     anime({
         targets: "#coord" + x + "-" + y,
-        easing: "linear",
         rotateY: 180,
-        backgroundColor: function() {
-            if (board[x][y]==0) return "rgb(255,255,255)";
-            else return "rgb(0,255,255)";
+        backgroundColor: "rgb(240,240,240)",
+        easing: "linear",
+        duration: 300
+    })
+}
+
+function animatingWith(x, y) {
+    anime({
+        targets: "#coord" + x + "-" + y,
+        backgroundColor: {
+            value: "rgb(255,0,0)",
+            duration: 0,
         },
+        scale: [1, 30, 1],
+        opacity: [1, 0.1, 0.1, 0.1, 1],
+        easing: "linear",
         duration: 400
     })
 }

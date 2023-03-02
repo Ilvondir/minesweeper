@@ -2,12 +2,14 @@ body {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    overflow: hidden;
 }
 
 .container {
     width: 99vw;
     max-height: 100vh;
     padding: 1vw;
+    overflow: hidden;
     box-sizing: border-box;
 }
 
