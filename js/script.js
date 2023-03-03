@@ -115,9 +115,6 @@ function firstClick() {
         }
     }
 
-    console.log(board);
-    console.log(neighbours);
-
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
             let cell = document.querySelector("#coord" + j + "-" + i);
@@ -158,9 +155,16 @@ function end() {
 }
 
 function animationWithout(x, y) {
+
+    let cell = document.querySelector("#coord" + x + "-" + y);
+    if (neighbours[x][y]>0) {
+        cell.style.cssText = "color: red; font-weight: 700"
+        cell.innerHTML = neighbours[x][y];
+    }
+
     anime({
         targets: "#coord" + x + "-" + y,
-        rotateY: 180,
+        rotateY: 360,
         backgroundColor: "rgb(240,240,240)",
         easing: "linear",
         duration: 300
