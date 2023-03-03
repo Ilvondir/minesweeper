@@ -3,10 +3,8 @@ const gamePanel = document.querySelector(".game");
 
 startButton.addEventListener("click", start);
 
-let rows;
-let cols;
-let board;
-let bombs;
+let rows, cols, board, bombs;
+let neighbours;
 
 function start() {
     cols = document.querySelector("#cols").value;
@@ -55,7 +53,6 @@ function start() {
             cell.addEventListener("click", firstClick);
 
             row.append(cell)
-
         }
     }
 }
@@ -90,6 +87,34 @@ function firstClick() {
 
     drawBombs(x, y);
 
+    neighbours = new Array(rows);
+
+    for (let i = 0; i < rows; i++) {
+        neighbours[i] = new Array(cols);
+
+        for (let j = 0; j < cols; j++) {
+            neighbours[i][j] = 0;
+        }
+    }
+
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+            let sum = 0;
+
+            if (board[i][j] == 1) neighbours[i][j] = -1;
+            else {
+                for (let ii = i - 1; ii <= i + 1; ii++) {
+                    for (let jj = j - 1; jj <= j + 1; jj++) {
+                        if (ii>=cols || ii<0 || jj>=rows || jj<0) {
+                        } else if (board[ii][jj] == 1) sum++;
+                    }
+                }
+
+                neighbours[i][j] = sum;
+            }
+        }
+    }
+
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
             let cell = document.querySelector("#coord" + j + "-" + i);
@@ -98,8 +123,7 @@ function firstClick() {
         }
     }
 
-    if (board[x][y] == 1) animatingWith(x, y);
-    else animatingWithout(x, y);
+    animationWithout(x, y);
 }
 
 function checking() {
@@ -110,23 +134,44 @@ function checking() {
     let y = coords[1];
 
     if (board[x][y] == 1) {
-        animatingWith(x, y);
+        let cell = document.querySelector("#coord" + x + "-" + y);
+        cell.style.cssText = "z-index: 1000";
+        animationWith(x, y);
+        end();
     }
-    else animatingWithout(x, y);
-    
+    else animationWithout(x, y);
+
+    let cell = document.querySelector("#coord" + x + "-" + y);
+    cell.removeEventListener("click", checking);
 }
 
-function animatingWithout(x, y) {
+function end() {
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+            let cell = document.querySelector("#coord" + j + "-" + i);
+            cell.removeEventListener("click", checking);
+        }
+    }
+}
+
+function animationWithout(x, y) {
+
+    let cell = document.querySelector("#coord" + x + "-" + y);
+    if (neighbours[x][y]>0) {
+        cell.style.cssText = "color: red; font-weight: 700"
+        cell.innerHTML = neighbours[x][y];
+    }
+
     anime({
         targets: "#coord" + x + "-" + y,
-        rotateY: 180,
+        rotateY: 360,
         backgroundColor: "rgb(240,240,240)",
         easing: "linear",
         duration: 300
     })
 }
 
-function animatingWith(x, y) {
+function animationWith(x, y) {
     anime({
         targets: "#coord" + x + "-" + y,
         backgroundColor: {
@@ -137,7 +182,7 @@ function animatingWith(x, y) {
         opacity: [1, 0],
         easing: "linear",
         duration: 500,
-        complete: function() {
+        complete: function () {
             anime({
                 targets: "#coord" + x + "-" + y,
                 backgroundColor: "rgb(255,0,0)",
