@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="pl-PL">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sapper</title>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <script src="https://cdn.jsdelivr.net/npm/animejs@3.0.1/lib/anime.min.js"></script>
-        <script src="js/script.js" defer></script>
-    </head>
-    <body>
-        <div class="container">
-            <div class="panel">
-                <div class="p1">
-                    <label for="rows">Wprowadź liczbę wierszy: </label>
-                    <input type="number" min="12" max="20" id="rows" value="10"><br>
-                    <label for="cols">Wprowadź liczbę kolumn: </label>
-                    <input type="number" min="12" max="30" id="cols" value="10">
-                    <label for="bombs">Wprowadź poziom trudność: </label>
-                    <select id="bombs">
-                        <option value="Łatwy">Łatwy</option>
-                        <option value="Średni">Średni</option>
-                        <option value="Trudny">Trudny</option>
-                    </select>
-                </div>
-                <div class="p2">
-                    <button id="start">Rozpocznij grę</button>
-                </div>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sapper</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.9.3/tsparticles.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.0.1/lib/anime.min.js" defer></script>
+    <script src="js/script.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="panel">
+            <div class="p1">
+                <label for="rows">Wprowadź liczbę wierszy: </label>
+                <input type="number" min="12" max="20" id="rows" value="10"><br>
+                <label for="cols">Wprowadź liczbę kolumn: </label>
+                <input type="number" min="12" max="30" id="cols" value="10">
+                <label for="bombs">Wprowadź poziom trudność: </label>
+                <select id="bombs">
+                    <option value="Łatwy">Łatwy</option>
+                    <option value="Średni">Średni</option>
+                    <option value="Trudny">Trudny</option>
+                </select>
             </div>
-            <div class="game"></div>
+            <div class="p2">
+                <button id="start">Rozpocznij grę</button>
+            </div>
         </div>
-    </body>
+        <div class="game"></div>
+    </div>
+    <!-- <div id="tsparticles"></div> -->
+</body>
+
 </html>
