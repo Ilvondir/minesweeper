@@ -97,9 +97,8 @@ function firstClick() {
             cell.addEventListener("click", checking);
         }
     }
-
-    if (board[x][y] == 1) animatingWith(x, y);
-    else animatingWithout(x, y);
+    
+    animationWithout(x, y);
 }
 
 function checking() {
@@ -110,13 +109,25 @@ function checking() {
     let y = coords[1];
 
     if (board[x][y] == 1) {
-        animatingWith(x, y);
+        animationWith(x, y);
+        end();
     }
-    else animatingWithout(x, y);
+    else animationWithout(x, y);
     
+    let cell = document.querySelector("#coord" + j + "-" + i);
+    cell.removeEventListener("click", checking);
 }
 
-function animatingWithout(x, y) {
+function end() {
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+            let cell = document.querySelector("#coord" + j + "-" + i);
+            cell.removeEventListener("click", checking);
+        }
+    }
+}
+
+function animationWithout(x, y) {
     anime({
         targets: "#coord" + x + "-" + y,
         rotateY: 180,
@@ -126,7 +137,7 @@ function animatingWithout(x, y) {
     })
 }
 
-function animatingWith(x, y) {
+function animationWith(x, y) {
     anime({
         targets: "#coord" + x + "-" + y,
         backgroundColor: {
