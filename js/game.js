@@ -11,6 +11,16 @@ function start() {
 
     let difficult = document.querySelector("#bombs").value;
 
+    visited = new Array(rows);
+
+    for (let i = 0; i < rows; i++) {
+        visited[i] = new Array(cols);
+
+        for (let j = 0; j < cols; j++) {
+            visited[i][j] = 0;
+        }
+    }
+
     switch (difficult) {
         case "Łatwy":
             bombs = Math.floor(0.1 * cols * rows);
@@ -81,20 +91,10 @@ function firstClick() {
     let id = event.target.id;
     let coords = id.split("d");
     coords = coords[1].split("-");
-    let x = coords[0];
-    let y = coords[1];
+    let x = parseInt(coords[0]);
+    let y = parseInt(coords[1]);
 
     drawBombs(x, y);
-
-    visited = new Array(rows);
-
-    for (let i = 0; i < rows; i++) {
-        visited[i] = new Array(cols);
-
-        for (let j = 0; j < cols; j++) {
-            visited[i][j] = 0;
-        }
-    }
 
     neighbours = new Array(rows);
 
@@ -106,16 +106,17 @@ function firstClick() {
         }
     }
 
-    for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
             let sum = 0;
 
             if (board[i][j] == 1) neighbours[i][j] = -1;
             else {
                 for (let ii = i - 1; ii <= i + 1; ii++) {
                     for (let jj = j - 1; jj <= j + 1; jj++) {
-                        if (ii>=cols || ii<0 || jj>=rows || jj<0) {
-                        } else if (board[ii][jj] == 1) sum++;
+                        if (!(ii>=rows || ii<0 || jj>=cols || jj<0)) {
+                            if (board[ii][jj] == 1) sum++;
+                        }
                     }
                 }
 
@@ -124,9 +125,9 @@ function firstClick() {
         }
     }
 
-    for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-            let cell = document.querySelector("#coord" + j + "-" + i);
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            let cell = document.querySelector("#coord" + i + "-" + j);
             cell.removeEventListener("click", firstClick);
             cell.addEventListener("click", checking);
         }
@@ -139,8 +140,8 @@ function checking() {
     let id = event.target.id;
     let coords = id.split("d");
     coords = coords[1].split("-");
-    let x = coords[0];
-    let y = coords[1];
+    let x = parseInt(coords[0]);
+    let y = parseInt(coords[1]);
 
     if (board[x][y] == 1) {
         let cell = document.querySelector("#coord" + x + "-" + y);
@@ -155,12 +156,12 @@ function checking() {
 }
 
 function end() {
-    for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
 
-            let cell = document.querySelector("#coord" + j + "-" + i);
+            let cell = document.querySelector("#coord" + i + "-" + j);
             
-            if (board[j][i]==1) {
+            if (board[i][j]==1) {
                 let image = document.createElement("img");
                 image.setAttribute("src", "img/bomb.png");
                 image.setAttribute("alt", "Bomb.");
@@ -174,21 +175,21 @@ function end() {
 }
 
 function exploring(x, y) {
-    if (board[x][y]==1 || visited[x][y]==1) return;
+    if (board[x][y]==1 || visited[x][y]==1 || x<0 || y<0 || x>=rows || y>=cols) return;
 
     visited[x][y]=1;
 
     animationWithout(x, y);
 
     if (neighbours[x][y]==0) {
-        if (x>0) exploring(x-1, y);
-        //if (x<rows-1 && y>0) exploring(x+1, y-1);
-        //if (x<rows-1 && y<cols-1) exploring(x+1, y+1);
-        //if (x>0 && y>0) exploring(x-1, y-1);
-        //if (x>0 && y<cols-1) exploring(x-1, y+1);
         if (x<rows-1) exploring(x+1, y);
-        if (y>0) exploring(x, y-1);
+        if (x>0) exploring(x-1, y);
         if (y<cols-1) exploring(x, y+1);
+        if (y>0) exploring(x, y-1);
+        if (x<rows-1 && y>0) exploring(x+1, y-1);
+        if (x<rows-1 && y<cols-1) exploring(x+1, y+1);
+        if (x>0 && y>0) exploring(x-1, y-1);
+        if (x>0 && y<cols-1) exploring(x-1, y+1);
     }
 
     let cell = document.querySelector("#coord" + x + "-" + y);
