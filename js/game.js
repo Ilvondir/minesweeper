@@ -3,24 +3,23 @@ const gamePanel = document.querySelector(".game");
 
 startButton.addEventListener("click", start);
 
-let rows, cols, board, bombs;
-let neighbours;
+let rows, cols, board, bombs, neighbours, visited;
 
 function start() {
-    cols = document.querySelector("#cols").value;
-    rows = document.querySelector("#rows").value;
+    cols = parseInt(document.querySelector("#cols").value);
+    rows = parseInt(document.querySelector("#rows").value);
 
     let difficult = document.querySelector("#bombs").value;
 
     switch (difficult) {
         case "Łatwy":
-            bombs = Math.floor(0.2 * cols * rows);
+            bombs = Math.floor(0.1 * cols * rows);
             break;
         case "Średni":
-            bombs = Math.floor(0.35 * cols * rows);
+            bombs = Math.floor(0.2 * cols * rows);
             break;
         case "Trudny":
-            bombs = Math.floor(0.5 * cols * rows);
+            bombs = Math.floor(0.35 * cols * rows);
             break;
 
     }
@@ -87,6 +86,16 @@ function firstClick() {
 
     drawBombs(x, y);
 
+    visited = new Array(rows);
+
+    for (let i = 0; i < rows; i++) {
+        visited[i] = new Array(cols);
+
+        for (let j = 0; j < cols; j++) {
+            visited[i][j] = 0;
+        }
+    }
+
     neighbours = new Array(rows);
 
     for (let i = 0; i < rows; i++) {
@@ -123,7 +132,7 @@ function firstClick() {
         }
     }
 
-    animationWithout(x, y);
+    exploring(x, y);
 }
 
 function checking() {
@@ -139,7 +148,7 @@ function checking() {
         animationWith(x, y);
         end();
     }
-    else animationWithout(x, y);
+    else exploring(x, y);
 
     let cell = document.querySelector("#coord" + x + "-" + y);
     cell.removeEventListener("click", checking);
@@ -148,17 +157,49 @@ function checking() {
 function end() {
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
+
             let cell = document.querySelector("#coord" + j + "-" + i);
+            
+            if (board[j][i]==1) {
+                let image = document.createElement("img");
+                image.setAttribute("src", "img/bomb.png");
+                image.setAttribute("alt", "Bomb.");
+                image.setAttribute("style", "width:90%; height:90%");
+                cell.append(image);
+            }
+
             cell.removeEventListener("click", checking);
         }
     }
+}
+
+function exploring(x, y) {
+    if (board[x][y]==1 || visited[x][y]==1) return;
+
+    visited[x][y]=1;
+
+    animationWithout(x, y);
+
+    if (neighbours[x][y]==0) {
+        if (x>0) exploring(x-1, y);
+        //if (x<rows-1 && y>0) exploring(x+1, y-1);
+        //if (x<rows-1 && y<cols-1) exploring(x+1, y+1);
+        //if (x>0 && y>0) exploring(x-1, y-1);
+        //if (x>0 && y<cols-1) exploring(x-1, y+1);
+        if (x<rows-1) exploring(x+1, y);
+        if (y>0) exploring(x, y-1);
+        if (y<cols-1) exploring(x, y+1);
+    }
+
+    let cell = document.querySelector("#coord" + x + "-" + y);
+    if (visited[x][y]==0) cell.removeEventListener("click", checking);
 }
 
 function animationWithout(x, y) {
 
     let cell = document.querySelector("#coord" + x + "-" + y);
     if (neighbours[x][y]>0) {
-        cell.style.cssText = "color: red; font-weight: 700"
+        cell.style.cssText = "color: red; font-weight: 700";
         cell.innerHTML = neighbours[x][y];
     }
 
