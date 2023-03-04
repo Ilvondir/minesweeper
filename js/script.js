@@ -14,13 +14,13 @@ function start() {
 
     switch (difficult) {
         case "Łatwy":
-            bombs = Math.floor(0.2 * cols * rows);
+            bombs = Math.floor(0.1 * cols * rows);
             break;
         case "Średni":
-            bombs = Math.floor(0.35 * cols * rows);
+            bombs = Math.floor(0.2 * cols * rows);
             break;
         case "Trudny":
-            bombs = Math.floor(0.5 * cols * rows);
+            bombs = Math.floor(0.35 * cols * rows);
             break;
 
     }
@@ -135,6 +135,8 @@ function checking() {
 
     if (board[x][y] == 1) {
         let cell = document.querySelector("#coord" + x + "-" + y);
+
+
         cell.style.cssText = "z-index: 1000";
         animationWith(x, y);
         end();
@@ -148,7 +150,17 @@ function checking() {
 function end() {
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
+
             let cell = document.querySelector("#coord" + j + "-" + i);
+            
+            if (board[j][i]==1) {
+                let image = document.createElement("img");
+                image.setAttribute("src", "img/bomb.png");
+                image.setAttribute("alt", "Bomb.");
+                image.setAttribute("style", "width:90%; height:90%");
+                cell.append(image);
+            }
+
             cell.removeEventListener("click", checking);
         }
     }
