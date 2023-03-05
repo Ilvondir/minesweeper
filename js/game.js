@@ -200,7 +200,35 @@ function animationWithout(x, y) {
 
     let cell = document.querySelector("#coord" + x + "-" + y);
     if (neighbours[x][y]>0) {
-        cell.style.cssText = "color: red; font-weight: 700";
+        
+        switch (parseInt(neighbours[x][y])) {
+            case 1:
+                cell.style.cssText = "color: #4682B4";
+                break;
+            case 2:
+                cell.style.cssText = "color: #28B766";
+                break;
+            case 3:
+                cell.style.cssText = "color: #00DA24";
+                break;
+            case 4:
+                cell.style.cssText = "color: #48FF00";
+                break;
+            case 5:
+                cell.style.cssText = "color: #B6FF00";
+                break;
+            case 6:
+                cell.style.cssText = "color: #FFDA00";
+                break;
+            case 7:
+                cell.style.cssText = "color: #FF6D00";
+                break;
+            case 8:
+                cell.style.cssText = "color: #FF0000";
+                break;
+        }
+
+        cell.style.cssText += "font-weight: 700";
         cell.innerHTML = neighbours[x][y];
     }
 
