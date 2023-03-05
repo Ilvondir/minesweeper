@@ -3,66 +3,80 @@ const gamePanel = document.querySelector(".game");
 
 startButton.addEventListener("click", start);
 
-let rows, cols, board, bombs, neighbours, visited;
+let rows, cols, board, bombs, neighbours, visited, markers;
+
+const place = document.querySelector(".containerF");
+const counter = document.createElement("div");
+counter.setAttribute("class", "counter");
+place.append(counter);
 
 function start() {
     cols = parseInt(document.querySelector("#cols").value);
     rows = parseInt(document.querySelector("#rows").value);
 
-    let difficult = document.querySelector("#bombs").value;
+    if (cols>=10 && cols <=30 && rows>=10 && rows<=20) {
+        let difficult = document.querySelector("#bombs").value;
 
-    visited = new Array(rows);
+        visited = new Array(rows);
 
-    for (let i = 0; i < rows; i++) {
-        visited[i] = new Array(cols);
+        for (let i = 0; i < rows; i++) {
+            visited[i] = new Array(cols);
 
-        for (let j = 0; j < cols; j++) {
-            visited[i][j] = 0;
+            for (let j = 0; j < cols; j++) {
+                visited[i][j] = 0;
+            }
         }
-    }
 
-    switch (difficult) {
-        case "Łatwy":
-            bombs = Math.floor(0.1 * cols * rows);
-            break;
-        case "Średni":
-            bombs = Math.floor(0.2 * cols * rows);
-            break;
-        case "Trudny":
-            bombs = Math.floor(0.35 * cols * rows);
-            break;
+        switch (difficult) {
+            case "Easy":
+                bombs = Math.floor(0.1 * cols * rows);
+                break;
+            case "Medium":
+                bombs = Math.floor(0.2 * cols * rows);
+                break;
+            case "Hard":
+                bombs = Math.floor(0.3 * cols * rows);
+                break;
 
-    }
-
-    gamePanel.innerHTML = "";
-
-    board = new Array(rows);
-
-    for (let i = 0; i < rows; i++) {
-        board[i] = new Array(cols);
-
-        for (let j = 0; j < cols; j++) {
-            board[i][j] = 0;
         }
-    }
 
-    for (let i = 0; i < rows; i++) {
+        gamePanel.innerHTML = "";
+        markers = bombs;
 
-        const row = document.createElement("div");
-        row.setAttribute("class", "row");
-        gamePanel.append(row);
+        board = new Array(rows);
 
-        for (let j = 0; j < cols; j++) {
+        for (let i = 0; i < rows; i++) {
+            board[i] = new Array(cols);
 
-            let id = "coord" + i + "-" + j;
-
-            const cell = document.createElement("div");
-            cell.setAttribute("id", id);
-            cell.setAttribute("class", "cell");
-            cell.addEventListener("click", firstClick);
-
-            row.append(cell)
+            for (let j = 0; j < cols; j++) {
+                board[i][j] = 0;
+            }
         }
+
+        for (let i = 0; i < rows; i++) {
+
+            const row = document.createElement("div");
+            row.setAttribute("class", "row");
+            gamePanel.append(row);
+
+            for (let j = 0; j < cols; j++) {
+
+                let id = "coord" + i + "-" + j;
+
+                const cell = document.createElement("div");
+                cell.setAttribute("id", id);
+                cell.setAttribute("class", "cell");
+                cell.addEventListener("click", firstClick);
+
+                row.append(cell)
+            }
+        }
+
+        counter.innerHTML = 'Markers left: <span id="left"></span>';
+        document.querySelector(".counter #left"). innerHTML = markers;
+    } else {
+        gamePanel.innerHTML = "Enter board data from the allowed ranges. <br> 10 <= rows <= 20 <br> 10 <= columns <= 30";
+        counter.innerHTML = '';
     }
 }
 
@@ -144,6 +158,8 @@ function checking() {
     let y = parseInt(coords[1]);
 
     if (board[x][y] == 1) {
+        const audio = new Audio("sounds/explosion.mp3");
+        audio.play();
         let cell = document.querySelector("#coord" + x + "-" + y);
         cell.style.cssText = "z-index: 1000";
         animationWith(x, y);
@@ -165,7 +181,7 @@ function end() {
                 let image = document.createElement("img");
                 image.setAttribute("src", "img/bomb.png");
                 image.setAttribute("alt", "Bomb.");
-                image.setAttribute("style", "width:90%; height:90%");
+                image.setAttribute("style", "width:90%");
                 cell.append(image);
             }
 
@@ -182,14 +198,14 @@ function exploring(x, y) {
     animationWithout(x, y);
 
     if (neighbours[x][y]==0) {
-        if (x<rows-1) exploring(x+1, y);
-        if (x>0) exploring(x-1, y);
-        if (y<cols-1) exploring(x, y+1);
-        if (y>0) exploring(x, y-1);
-        if (x<rows-1 && y>0) exploring(x+1, y-1);
-        if (x<rows-1 && y<cols-1) exploring(x+1, y+1);
-        if (x>0 && y>0) exploring(x-1, y-1);
-        if (x>0 && y<cols-1) exploring(x-1, y+1);
+        if (x<rows-1 && visited[x+1][y]!=1) exploring(x+1, y);
+        if (x>0 && visited[x-1][y]!=1) exploring(x-1, y);
+        if (y<cols-1 && visited[x][y+1]!=1) exploring(x, y+1);
+        if (y>0 && visited[x][y-1]!=1) exploring(x, y-1);
+        if (x<rows-1 && y>0 && visited[x+1][y-1]!=1) exploring(x+1, y-1);
+        if (x<rows-1 && y<cols-1 && visited[x+1][y+1]!=1) exploring(x+1, y+1);
+        if (x>0 && y>0 && visited[x-1][y-1]!=1) exploring(x-1, y-1);
+        if (x>0 && y<cols-1 && visited[x-1][y+1]!=1) exploring(x-1, y+1);
     }
 
     let cell = document.querySelector("#coord" + x + "-" + y);
@@ -200,7 +216,35 @@ function animationWithout(x, y) {
 
     let cell = document.querySelector("#coord" + x + "-" + y);
     if (neighbours[x][y]>0) {
-        cell.style.cssText = "color: red; font-weight: 700";
+        
+        switch (parseInt(neighbours[x][y])) {
+            case 1:
+                cell.style.cssText = "color: #4682B4";
+                break;
+            case 2:
+                cell.style.cssText = "color: #28B766";
+                break;
+            case 3:
+                cell.style.cssText = "color: #00DA24";
+                break;
+            case 4:
+                cell.style.cssText = "color: #48FF00";
+                break;
+            case 5:
+                cell.style.cssText = "color: #B6FF00";
+                break;
+            case 6:
+                cell.style.cssText = "color: #FFDA00";
+                break;
+            case 7:
+                cell.style.cssText = "color: #FF6D00";
+                break;
+            case 8:
+                cell.style.cssText = "color: #FF0000";
+                break;
+        }
+
+        cell.style.cssText += "font-weight: 700";
         cell.innerHTML = neighbours[x][y];
     }
 

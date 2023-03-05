@@ -1,38 +1,41 @@
 <!DOCTYPE html>
-<html lang="pl-PL">
+<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sapper</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.9.3/tsparticles.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/animejs@3.0.1/lib/anime.min.js" defer></script>
-    <script src="js/game.js" defer></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="img/icon.ico">
+        <title>Sapper</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.9.3/tsparticles.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/animejs@3.0.1/lib/anime.min.js" defer></script>
+        <script src="js/game.js" defer></script>
+    </head>
 
-<body>
-    <div class="container">
-        <div class="panel">
-            <div class="p1">
-                <label for="rows">Wprowadź liczbę wierszy: </label>
-                <input type="number" min="12" max="20" id="rows" value="10"><br>
-                <label for="cols">Wprowadź liczbę kolumn: </label>
-                <input type="number" min="12" max="30" id="cols" value="10">
-                <label for="bombs">Wprowadź poziom trudność: </label>
-                <select id="bombs">
-                    <option value="Łatwy">Łatwy</option>
-                    <option value="Średni">Średni</option>
-                    <option value="Trudny">Trudny</option>
-                </select>
+    <body>
+        <div class="containerF">
+            <div class="panel">
+                <div class="p1">
+                    <label for="rows" class="label">Enter number of rows: </label>
+                    <input type="number" class="form-control" min="10" max="20" id="rows" value="10">
+                    <label for="cols" class="label">Enter number of columns: </label>
+                    <input type="number" class="form-control" min="10" max="30" id="cols" value="10">
+                    <label for="bombs" class="label">Choose difficulty level: </label>
+                    <select id="bombs" class="form-select">
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+                <div class="p2 text-center">
+                    <button id="start" class="btn btn-success">Start game</button>
+                </div>
             </div>
-            <div class="p2">
-                <button id="start">Rozpocznij grę</button>
-            </div>
+            <div class="game"></div>
         </div>
-        <div class="game"></div>
-    </div>
-    <!-- <div id="tsparticles"></div> -->
-</body>
+        <!-- <div id="tsparticles"></div> -->
+    </body>
 
 </html>
