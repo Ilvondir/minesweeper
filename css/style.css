@@ -94,3 +94,9 @@ body {
     margin-top: 0;
     margin-bottom: 0.5vw;
 }
+
+.counter {
+    position: absolute;
+    top: 1vw;
+    left: 18vw;
+}
