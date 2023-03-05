@@ -22,14 +22,14 @@ function start() {
     }
 
     switch (difficult) {
-        case "Łatwy":
+        case "Easy":
             bombs = Math.floor(0.1 * cols * rows);
             break;
-        case "Średni":
+        case "Medium":
             bombs = Math.floor(0.2 * cols * rows);
             break;
-        case "Trudny":
-            bombs = Math.floor(0.35 * cols * rows);
+        case "Hard":
+            bombs = Math.floor(0.3 * cols * rows);
             break;
 
     }
@@ -165,7 +165,7 @@ function end() {
                 let image = document.createElement("img");
                 image.setAttribute("src", "img/bomb.png");
                 image.setAttribute("alt", "Bomb.");
-                image.setAttribute("style", "width:90%; height:90%");
+                image.setAttribute("style", "width:90%");
                 cell.append(image);
             }
 

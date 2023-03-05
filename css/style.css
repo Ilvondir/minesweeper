@@ -10,7 +10,7 @@ body {
     overflow: hidden;
 }
 
-.container {
+.containerF {
     width: 99vw;
     max-height: 100vh;
     padding: 1vw;
@@ -18,7 +18,7 @@ body {
     box-sizing: border-box;
 }
 
-.container > .panel {
+.containerF > .panel {
     width: 15vw;
     padding: 1vw;
     height: 96vh;
@@ -30,17 +30,19 @@ body {
     border-radius: 1.5vw;
 }
 
-.container > .panel > .p1 {
+.containerF > .panel > .p1 {
     float: left;
     line-height: 2.2vw;
+    width: 100%;
 }
 
-.container > .panel > .p2 {
+.containerF > .panel > .p2 {
     float: left;
-    margin: 1.4vw;
+    margin-top: 1.4vw;
+    width: 100%;
 }
 
-.container > .game {
+.containerF > .game {
     float: left;
     max-width: 75vw;
     display: flex;
@@ -51,7 +53,7 @@ body {
     height: 97vh;
 }
 
-.container > .game > .row {
+.containerF > .game > .row {
     width: 100%;
     float: left;
     display: flex;
@@ -59,11 +61,12 @@ body {
     justify-content: center;
 }
 
-.container > .game > .row > .cell {
+.containerF > .game > .row > .cell {
     width: 1.8vw;
     height: 1.8vw;
     background-color: #AAA;
     margin: .2vw;
+    padding: 0;
     float: left;
     display: flex;
     align-items: center;
@@ -79,4 +82,15 @@ body {
     top: 0;
     left: 0;
     margin: 0;
+}
+
+.label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.form-control {
+    margin-top: 0;
+    margin-bottom: 0.5vw;
 }
