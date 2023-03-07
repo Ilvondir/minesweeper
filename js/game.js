@@ -282,9 +282,19 @@ function victory() {
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             if (board[i][j]!=1 && visited[i][j]!=1) exploring(i, j);
+
+            let cell = document.querySelector("#coord" + i + "-" + j);
+
+            if (markersBoard[i][j]==1 && board[i][j]==1) {
+                const flag = cell.querySelector("img");
+                flag.setAttribute("src", "img/goodMarker.png");
+            }
+
+            cell.removeEventListener("click", checking);
+            cell.removeEventListener("contextmenu", marking);
+            cell.removeEventListener("contextmenu", unmarking);
         }
     }
-
 
     const confetti = document.createElement("script");
     confetti.setAttribute("src", "js/confetti.js");
@@ -293,7 +303,7 @@ function victory() {
     setTimeout(function() {
         const script = document.querySelector("#tsparticles");
         document.querySelector("body").removeChild(script);
-    }, 5000);
+    }, 2000);
 }
 
 function exploring(x, y) {
