@@ -192,6 +192,19 @@ function marking(cm) {
             cell.addEventListener("contextmenu", unmarking);
         }
     }
+
+    if (markers==0) {
+
+        let win = true;
+
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (markersBoard[i][j]!=board[i][j]) win = false;
+            }
+        }
+
+        if (win) victory();
+    }
 }
 
 function unmarking(cm) {
@@ -244,7 +257,7 @@ function end() {
 
             let cell = document.querySelector("#coord" + i + "-" + j);
 
-            if (board[i][j] == 1) {
+            if (board[i][j] == 1 && markersBoard[i][j]==0) {
                 let image = document.createElement("img");
                 image.setAttribute("src", "img/bomb.png");
                 image.setAttribute("alt", "Bomb.");
@@ -252,9 +265,20 @@ function end() {
                 cell.append(image);
             }
 
+            if (markersBoard[i][j]==1 && board[i][j]==1) {
+                const flag = cell.querySelector("img");
+                flag.setAttribute("src", "img/goodMarker.png");
+            }
+
             cell.removeEventListener("click", checking);
+            cell.removeEventListener("contextmenu", marking);
+            cell.removeEventListener("contextmenu", unmarking);
         }
     }
+}
+
+function victory() {
+    alert("Wygrałeś!");
 }
 
 function exploring(x, y) {
