@@ -173,8 +173,6 @@ function marking(cm) {
 
     let cell = document.querySelector("#coord" + x + "-" + y);
 
-    let temp = markersBoard[x][y];
-
     if (visited[x][y] != 1) {
         if (markers > 0) {
 
@@ -189,11 +187,23 @@ function marking(cm) {
             cell.append(flag);
 
             markersBoard[x][y] = 1;
-            visited[x][y] = 1;
 
             cell.removeEventListener("contextmenu", marking);
             cell.addEventListener("contextmenu", unmarking);
         }
+    }
+
+    if (markers==0) {
+
+        let win = true;
+
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (markersBoard[i][j]!=board[i][j]) win = false;
+            }
+        }
+
+        if (win) victory();
     }
 }
 
@@ -247,7 +257,7 @@ function end() {
 
             let cell = document.querySelector("#coord" + i + "-" + j);
 
-            if (board[i][j] == 1) {
+            if (board[i][j] == 1 && markersBoard[i][j]==0) {
                 let image = document.createElement("img");
                 image.setAttribute("src", "img/bomb.png");
                 image.setAttribute("alt", "Bomb.");
@@ -255,9 +265,35 @@ function end() {
                 cell.append(image);
             }
 
+            if (markersBoard[i][j]==1 && board[i][j]==1) {
+                const flag = cell.querySelector("img");
+                flag.setAttribute("src", "img/goodMarker.png");
+            }
+
             cell.removeEventListener("click", checking);
+            cell.removeEventListener("contextmenu", marking);
+            cell.removeEventListener("contextmenu", unmarking);
         }
     }
+}
+
+function victory() {
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (board[i][j]!=1 && visited[i][j]!=1) exploring(i, j);
+        }
+    }
+
+
+    const confetti = document.createElement("script");
+    confetti.setAttribute("src", "js/confetti.js");
+    gamePanel.append(confetti);
+
+    setTimeout(function() {
+        const script = document.querySelector("#tsparticles");
+        document.querySelector("body").removeChild(script);
+    }, 5000);
 }
 
 function exploring(x, y) {
@@ -280,6 +316,13 @@ function exploring(x, y) {
 
     let cell = document.querySelector("#coord" + x + "-" + y);
     if (visited[x][y] == 0) cell.removeEventListener("click", checking);
+
+    if (markersBoard[x][y]==1) {
+        markersBoard[x][y]=0;
+        markers++;
+        cell.innerHTML = "";
+        document.querySelector(".counter #left").innerHTML = markers;
+    }
 }
 
 function animationWithout(x, y) {
