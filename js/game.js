@@ -173,8 +173,6 @@ function marking(cm) {
 
     let cell = document.querySelector("#coord" + x + "-" + y);
 
-    let temp = markersBoard[x][y];
-
     if (visited[x][y] != 1) {
         if (markers > 0) {
 
@@ -189,7 +187,6 @@ function marking(cm) {
             cell.append(flag);
 
             markersBoard[x][y] = 1;
-            visited[x][y] = 1;
 
             cell.removeEventListener("contextmenu", marking);
             cell.addEventListener("contextmenu", unmarking);
@@ -280,6 +277,13 @@ function exploring(x, y) {
 
     let cell = document.querySelector("#coord" + x + "-" + y);
     if (visited[x][y] == 0) cell.removeEventListener("click", checking);
+
+    if (markersBoard[x][y]==1) {
+        markersBoard[x][y]=0;
+        markers++;
+        cell.innerHTML = "";
+        document.querySelector(".counter #left").innerHTML = markers;
+    }
 }
 
 function animationWithout(x, y) {
