@@ -278,7 +278,22 @@ function end() {
 }
 
 function victory() {
-    alert("Wygrałeś!");
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (board[i][j]!=1 && visited[i][j]!=1) exploring(i, j);
+        }
+    }
+
+
+    const confetti = document.createElement("script");
+    confetti.setAttribute("src", "js/confetti.js");
+    gamePanel.append(confetti);
+
+    setTimeout(function() {
+        const script = document.querySelector("#tsparticles");
+        document.querySelector("body").removeChild(script);
+    }, 5000);
 }
 
 function exploring(x, y) {
