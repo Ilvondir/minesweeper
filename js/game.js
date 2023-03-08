@@ -89,7 +89,7 @@ function start() {
         counter.innerHTML = 'Markers left: <span id="left"></span>';
         document.querySelector(".counter #left").innerHTML = markers;
 
-        clock(1);
+        clockF(1);
 
     } else {
         gamePanel.innerHTML = "Enter board data from the allowed ranges. <br> 10 <= rows <= 20 <br> 10 <= columns <= 30";
@@ -118,7 +118,9 @@ function drawBombs(xClick, yClick) {
     }
 }
 
-function clock(status) {
+let interval;
+
+function clockF(status) {
 
     if (status==1) {
         mins = 0;
@@ -127,27 +129,32 @@ function clock(status) {
 
         clock.innerHTML = "00:00:00";
 
-        setInterval(function() {
-            if (secs<60) secs++;
-            if (secs==60) {
-                secs = 0;
-                mins++;
-            }
-            if (mins==60) {
-                secs = 0;
-                mins = 0;
-                hours++;
-            }
-
-            if (hours<10) clock.innerHTML = "0" + hours + ":";
-            if (hours>=10) clock.innerHTML = hours + ":";
-            if (secs<10 && mins<10) clock.innerHTML += "0" + mins + ":0" + secs;
-            if (secs>=10 && mins<10) clock.innerHTML += "0" + mins + ":" + secs;
-            if (secs<10 && mins>=10) clock.innerHTML += mins + ":0" + secs;
-            if (secs>=10 && mins>=10) clock.innerHTML += mins + ":" + secs;
-
-        }, 1000)
+        interval = setInterval(run, 1000)
     }
+
+    if (status==2) {
+        clearInterval(interval);
+    }
+}
+
+function run() {
+    if (secs<60) secs++;
+    if (secs==60) {
+        secs = 0;
+        mins++;
+    }
+    if (mins==60) {
+        secs = 0;
+        mins = 0;
+        hours++;
+    }
+
+    if (hours<10) clock.innerHTML = "0" + hours + ":";
+    if (hours>=10) clock.innerHTML = hours + ":";
+    if (secs<10 && mins<10) clock.innerHTML += "0" + mins + ":0" + secs;
+    if (secs>=10 && mins<10) clock.innerHTML += "0" + mins + ":" + secs;
+    if (secs<10 && mins>=10) clock.innerHTML += mins + ":0" + secs;
+    if (secs>=10 && mins>=10) clock.innerHTML += mins + ":" + secs;
 }
 
 function firstClick() {
@@ -291,6 +298,9 @@ function checking() {
 }
 
 function end() {
+
+    clockF(2);
+
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
 
@@ -317,6 +327,8 @@ function end() {
 }
 
 function victory() {
+
+    clockF(2);
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
