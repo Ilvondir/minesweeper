@@ -3,12 +3,16 @@ const gamePanel = document.querySelector(".game");
 
 startButton.addEventListener("click", start);
 
-let rows, cols, board, bombs, neighbours, visited, markers, markersBoard;
+let rows, cols, board, bombs, neighbours, visited, markers, markersBoard, mins, secs;
 
 const place = document.querySelector(".containerF");
 const counter = document.createElement("div");
 counter.setAttribute("class", "counter");
 place.append(counter);
+
+const clock = document.createElement("div");
+clock.setAttribute("class", "clock");
+place.append(clock);
 
 function start() {
     cols = parseInt(document.querySelector("#cols").value);
@@ -84,6 +88,9 @@ function start() {
 
         counter.innerHTML = 'Markers left: <span id="left"></span>';
         document.querySelector(".counter #left").innerHTML = markers;
+
+        clock(1);
+
     } else {
         gamePanel.innerHTML = "Enter board data from the allowed ranges. <br> 10 <= rows <= 20 <br> 10 <= columns <= 30";
         counter.innerHTML = '';
@@ -108,6 +115,38 @@ function drawBombs(xClick, yClick) {
                 again = false;
             } else again = true;
         } while (again)
+    }
+}
+
+function clock(status) {
+
+    if (status==1) {
+        mins = 0;
+        secs = 0;
+        hours = 0;
+
+        clock.innerHTML = "00:00:00";
+
+        setInterval(function() {
+            if (secs<60) secs++;
+            if (secs==60) {
+                secs = 0;
+                mins++;
+            }
+            if (mins==60) {
+                secs = 0;
+                mins = 0;
+                hours++;
+            }
+
+            if (hours<10) clock.innerHTML = "0" + hours + ":";
+            if (hours>=10) clock.innerHTML = hours + ":";
+            if (secs<10 && mins<10) clock.innerHTML += "0" + mins + ":0" + secs;
+            if (secs>=10 && mins<10) clock.innerHTML += "0" + mins + ":" + secs;
+            if (secs<10 && mins>=10) clock.innerHTML += mins + ":0" + secs;
+            if (secs>=10 && mins>=10) clock.innerHTML += mins + ":" + secs;
+
+        }, 1000)
     }
 }
 

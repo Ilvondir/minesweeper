@@ -100,3 +100,9 @@ body {
     top: 1vw;
     left: 18vw;
 }
+
+.clock {
+    position: absolute;
+    top: 1vw;
+    right: 1vw;
+}
