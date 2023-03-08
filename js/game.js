@@ -3,12 +3,16 @@ const gamePanel = document.querySelector(".game");
 
 startButton.addEventListener("click", start);
 
-let rows, cols, board, bombs, neighbours, visited, markers, markersBoard;
+let rows, cols, board, bombs, neighbours, visited, markers, markersBoard, mins, secs;
 
 const place = document.querySelector(".containerF");
 const counter = document.createElement("div");
 counter.setAttribute("class", "counter");
 place.append(counter);
+
+const clock = document.createElement("div");
+clock.setAttribute("class", "clock");
+place.append(clock);
 
 function start() {
     cols = parseInt(document.querySelector("#cols").value);
@@ -84,6 +88,9 @@ function start() {
 
         counter.innerHTML = 'Markers left: <span id="left"></span>';
         document.querySelector(".counter #left").innerHTML = markers;
+
+        clockF(1);
+
     } else {
         gamePanel.innerHTML = "Enter board data from the allowed ranges. <br> 10 <= rows <= 20 <br> 10 <= columns <= 30";
         counter.innerHTML = '';
@@ -109,6 +116,45 @@ function drawBombs(xClick, yClick) {
             } else again = true;
         } while (again)
     }
+}
+
+let interval;
+
+function clockF(status) {
+
+    if (status==1) {
+        mins = 0;
+        secs = 0;
+        hours = 0;
+
+        clock.innerHTML = "00:00:00";
+
+        interval = setInterval(run, 1000)
+    }
+
+    if (status==2) {
+        clearInterval(interval);
+    }
+}
+
+function run() {
+    if (secs<60) secs++;
+    if (secs==60) {
+        secs = 0;
+        mins++;
+    }
+    if (mins==60) {
+        secs = 0;
+        mins = 0;
+        hours++;
+    }
+
+    if (hours<10) clock.innerHTML = "0" + hours + ":";
+    if (hours>=10) clock.innerHTML = hours + ":";
+    if (secs<10 && mins<10) clock.innerHTML += "0" + mins + ":0" + secs;
+    if (secs>=10 && mins<10) clock.innerHTML += "0" + mins + ":" + secs;
+    if (secs<10 && mins>=10) clock.innerHTML += mins + ":0" + secs;
+    if (secs>=10 && mins>=10) clock.innerHTML += mins + ":" + secs;
 }
 
 function firstClick() {
@@ -252,6 +298,9 @@ function checking() {
 }
 
 function end() {
+
+    clockF(2);
+
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
 
@@ -279,12 +328,24 @@ function end() {
 
 function victory() {
 
+    clockF(2);
+
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             if (board[i][j]!=1 && visited[i][j]!=1) exploring(i, j);
+
+            let cell = document.querySelector("#coord" + i + "-" + j);
+
+            if (markersBoard[i][j]==1 && board[i][j]==1) {
+                const flag = cell.querySelector("img");
+                flag.setAttribute("src", "img/goodMarker.png");
+            }
+
+            cell.removeEventListener("click", checking);
+            cell.removeEventListener("contextmenu", marking);
+            cell.removeEventListener("contextmenu", unmarking);
         }
     }
-
 
     const confetti = document.createElement("script");
     confetti.setAttribute("src", "js/confetti.js");
@@ -293,7 +354,7 @@ function victory() {
     setTimeout(function() {
         const script = document.querySelector("#tsparticles");
         document.querySelector("body").removeChild(script);
-    }, 5000);
+    }, 2000);
 }
 
 function exploring(x, y) {
