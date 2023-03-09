@@ -89,6 +89,7 @@ function start() {
         counter.innerHTML = 'Markers left: <span id="left"></span>';
         document.querySelector(".counter #left").innerHTML = markers;
 
+        clockF(2);
         clockF(1);
 
     } else {
