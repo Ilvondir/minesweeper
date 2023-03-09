@@ -229,7 +229,7 @@ function marking(cm) {
             flag.setAttribute("src", "img/marker.png");
             flag.setAttribute("alt", "Marker.");
             flag.setAttribute("style", "height: 90%");
-            flag.setAttribute("id", "fcoord" + x + "-" + y);
+            flag.setAttribute("id", "coord" + x + "-" + y);
             cell.append(flag);
 
             markersBoard[x][y] = 1;
@@ -328,6 +328,9 @@ function end() {
 
 function victory() {
 
+    const fanfare = new Audio("sounds/fanfare.mp3");
+    fanfare.play();
+
     clockF(2);
 
     for (let i = 0; i < rows; i++) {
@@ -362,8 +365,6 @@ function exploring(x, y) {
 
     visited[x][y] = 1;
 
-    animationWithout(x, y);
-
     if (neighbours[x][y] == 0) {
         if (x < rows - 1 && visited[x + 1][y] != 1) exploring(x + 1, y);
         if (x > 0 && visited[x - 1][y] != 1) exploring(x - 1, y);
@@ -384,6 +385,8 @@ function exploring(x, y) {
         cell.innerHTML = "";
         document.querySelector(".counter #left").innerHTML = markers;
     }
+
+    animationWithout(x, y);
 }
 
 function animationWithout(x, y) {
@@ -442,7 +445,7 @@ function animationWith(x, y) {
         opacity: [1, 0],
         easing: "linear",
         duration: 500,
-        complete: function () {
+        complete: () => {
             anime({
                 targets: "#coord" + x + "-" + y,
                 backgroundColor: "rgb(255,0,0)",
